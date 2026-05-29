@@ -64,6 +64,7 @@ const replayDetectionMiddleware = require('../middleware/replayDetection');
 const Database = require('../utils/database');
 const HealthCheckService = require('../services/HealthCheckService');
 const { initializeApiKeysTable } = require('../models/apiKeys');
+const { initializeDefaultStore } = require('../utils/nonceStore');
 const WebhookService = require('../services/WebhookService');
 const { validateRBAC } = require('../utils/rbacValidator');
 const log = require('../utils/log');
@@ -732,6 +733,7 @@ async function startServer() {
         const { runMigrations } = require('../utils/migrationRunner');
         await runMigrations();
         await initializeApiKeysTable();
+        initializeDefaultStore(Database);
 
         const { initializeFeatureFlagsTable, loadFlagsFromEnv } = require('../utils/featureFlags');
         await initializeFeatureFlagsTable();
